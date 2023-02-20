@@ -109,7 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
-
+  TextEditingController _emailLinkController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -129,6 +129,19 @@ class _MyHomePageState extends State<MyHomePage> {
                   TextFormField(
                     maxLength: 25,
                     controller: _emailController,
+                   
+                  
+                    decoration: const InputDecoration(
+                      hintText: 'Email',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+  //Почта ссылка
+            Text('Email link'),
+
+                  TextFormField(
+                    
+                    controller: _emailLinkController,
                    
                   
                     decoration: const InputDecoration(
@@ -202,6 +215,20 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                   ),
+                      SizedBox(
+                    height: 35,
+                    child: ElevatedButton(
+                      onPressed: () {
+                      
+                          signInEmailLink(_emailController.text,_emailLinkController.text);
+                    
+                      },
+                      child: const Text(
+                        'Авторизация (email-link)',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ),
+                  ),
                   SizedBox(
                     height: 35,
                     child: ElevatedButton(
@@ -236,6 +263,18 @@ class _MyHomePageState extends State<MyHomePage> {
   await  FirebaseAuth.instance.sendSignInLinkToEmail(email: email, actionCodeSettings: acs).catchError((onError) => print('Error sending email verification $onError'))
     .then((value) => print('Successfully sent email verification'));
     final user = FirebaseAuth.instance.currentUser;
+   
+
+
+
+
+ 
+  }
+  
+  Future<void> signInEmailLink(String email, String link) async {
+
+ await FirebaseAuth.instance.signInWithEmailLink(email: email, emailLink: link).then((value) => Navigator.push(context,MaterialPageRoute(builder: (context) => ResultPageF())));
+   
 
 
 
@@ -249,6 +288,8 @@ class _MyHomePageState extends State<MyHomePage> {
   
   void signInPhone(String phone) {
     FirebaseAuth.instance.signInWithPhoneNumber(phone).then((value) => Navigator.push(context,MaterialPageRoute(builder: (context) => ResultPageF())));
+    //ConfirmationResult confirmationResult = await auth.signInWithPhoneNumber('+44 7123 123 456');
+ //   UserCredential userCredential = await confirmationResult.confirm('123456');
   }
 }
 
@@ -338,17 +379,17 @@ class RegPageF extends StatelessWidget {
                       border: OutlineInputBorder(),
                     ),
                   ),
-                  //Телефон
-                  TextFormField(
+                  // //Телефон
+                  // TextFormField(
                     
-                    maxLength: 100,
-                    controller: _phoneController,
+                  //   maxLength: 100,
+                  //   controller: _phoneController,
                   
-                    decoration: const InputDecoration(
-                      hintText: 'Телефон',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
+                  //   decoration: const InputDecoration(
+                  //     hintText: 'Телефон',
+                  //     border: OutlineInputBorder(),
+                  //   ),
+                  // ),
                   SizedBox(
                     height: 35,
                     child: ElevatedButton(
@@ -359,7 +400,7 @@ class RegPageF extends StatelessWidget {
                       Navigator.push(context,MaterialPageRoute(builder: (context) => MyHomePage(title: "oof",)));
                       },
                       child: const Text(
-                        'Регистраци (почта)',
+                        'Регистрация (почта)',
                         style: TextStyle(fontSize: 18),
                       ),
                     ),
